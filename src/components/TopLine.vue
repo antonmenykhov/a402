@@ -3,7 +3,7 @@
     <div class="container">
         <div class="half">
             <a href="tel:89088763416" class="contact-link">
-                <i class="fas fa-phone-alt"></i> +7-(908)-876-34-16</a>
+                <i class="fas fa-phone-alt"></i> +7-908-876-34-16</a>
             <a class="contact-link">
                 <i class="fas fa-envelope"></i> info@a402.ru</a>
         </div>

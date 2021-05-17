@@ -5,7 +5,7 @@
               <div class="logo">
                   <div class="logo-img"></div>
                   <div class="logo-text">
-                      <div class="main">Аудитория<span>402</span></div>
+                      <h1 class="main">Аудитория<span>402</span></h1>
                       <div class="second">Какой то слоган будет здесь</div>
                   </div>
               </div>
@@ -45,6 +45,9 @@ export default {
 </script>
 
 <style>
+.main{
+    margin: 0
+}
 .menu{
     display: flex;
     align-items: center;
@@ -76,10 +79,15 @@ export default {
 .logo-text .main{
     font-size: 24px;
     font-weight: 500;
-    color: #1ea69a;;
+    color: #1ea69a;
 }
 .logo-text .main span{
     color: rgb(49, 49, 49);
     font-size: 30px;
+}
+.logo-text .second{
+    letter-spacing: 0ch;
+    font-size: 12px;
+    text-align: center;
 }
 </style>
