@@ -8,203 +8,386 @@
             во всех тонкостях. В такой ситуации стоит обратиться за помощью к профессионалам
         </p>
 
-        
-    
-    <div class="service-wrapper">
-        <div class="color-half">
-            <i class="fas fa-balance-scale"></i>
+        <div class="service-wrapper">
+            <div class="color-half">
+                <i class="fas fa-balance-scale"></i>
                 <h3>Бухгалтерское обслуживание</h3>
                 <p>Мы предоставляем услуги по
-                     ведению бухгалтерского учета Юридическим лицам и
-                      Индивидуальным предпринимателям на различных системах
-                       налогообложения, сдаем всю необходимую отчетность в 
-                       контролирующие органы, представляем интересы клиентов в
-                        налоговой, консультируем в области налогообложения и 
-                        выборе оптимальной системы налогообложения.
+                    ведению бухгалтерского учета Юридическим лицам и
+                    Индивидуальным предпринимателям на различных системах
+                    налогообложения, сдаем всю необходимую отчетность в
+                    контролирующие органы, представляем интересы клиентов в
+                    налоговой, консультируем в области налогообложения и
+                    выборе оптимальной системы налогообложения.
                 </p>
+            </div>
+            <div class="white-half calc-wrapper">
+                <h3>Калькулятор бухгалтерских услуг</h3>
+                <el-form label-width="200px">
+                    <el-form-item label="Форма организации">
+                        <el-radio-group @change="calc" v-model="formOrg" fill="#1EA69A">
+
+                            <el-radio-button label="1">ООО</el-radio-button>
+                            <el-radio-button label="2">ИП</el-radio-button>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="Система налогообложения">
+                        <el-select @change="calc" v-model="sno">
+                            <el-option value="1" label="УСН доходы-расходы">УСН доходы-расходы</el-option>
+                            <el-option value="2" label="УСН доходы">УСН доходы</el-option>
+                            <el-option value="3" v-if="formOrg==1" label="ОСНО">ОСНО</el-option>
+                            <el-option value="4" v-if="formOrg==2" label="Патент">Патент</el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Сфера деятельности">
+                        <el-radio-group @change="calc" fill="#1EA69A" v-model="vid">
+                            <el-radio-button :disabled="sDisabled" :label="1">Услуги</el-radio-button>
+                            <el-radio-button :disabled="sDisabled" :label="1.2">Торговля</el-radio-button>
+                            <el-radio-button :disabled="sDisabled" :label="1.4">Производство</el-radio-button>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="Количество операций">
+                        <el-input-number :disabled="oDisabled" @change="calc" :step="5" :min="0" controls-position="right" v-model="oNumber">
+
+                        </el-input-number>
+                    </el-form-item>
+                    <el-form-item label="Количество сотрудников">
+                        <el-input-number :disabled="eDisabled" @change="calc" :step="1" :min="0" controls-position="right" v-model="eNumber">
+
+                        </el-input-number>
+                    </el-form-item>
+                    <transition name="fade">
+
+                        <div v-if="price" class="price">
+                            Стоимость обслуживания составит:
+                            <span>{{animatedNumber}}</span>{{ed}}
+                        </div>
+                    </transition>
+                </el-form>
+
+            </div>
+
         </div>
-        <div class="white-half">
-            fdsf
-        </div>
-    </div>
-    <div class="service-wrapper">
-        <div class="white-half">
-            <el-collapse v-model="ooo" accordion>
-                <el-collapse-item name="1" title="Заполнение форм заявлений">
-                    <table>
-                        <tr>
-                            <td>Р21001 Заявление регистрации физического лица в качестве ИП</td>
-                            <td>1000</td>
-                        </tr>
-                        <tr>
-                            <td>Р24001 Заявление о внесении изменений в сведения об ИП, содержащиеся в ЕГРИП</td>
-                            <td>700</td>
-                        </tr>
-                        <tr>
-                            <td>Р26001 Заявление о регистрации прекращения деятельности в качестве ИП</td>
-                            <td>500</td>
-                        </tr>
-                        <tr>
-                            <td>Р11001 Заявление о регистрации ЮЛ при создании (+ за каждого учредителя)</td>
-                            <td>1500 (+300)</td>
-                        </tr>
-                        <tr>
-                            <td>Р12003 Заявление о регистрации ЮЛ, создаваемого путём реорганизации</td>
-                            <td>1500</td>
-                        </tr>
-                        <tr>
-                            <td>Р13014 Заявление о регистрации изменений</td>
-                            <td>1500</td>
-                        </tr>
-                        <tr>
-                            <td>Р15001 Уведомление о ликвидации ЮЛ</td>
-                            <td>1500</td>
-                        </tr>
-                        <tr>
-                            <td>Р16001 Заявление о регистрации ЮЛ в связи с его ликвидацией</td>
-                            <td>1500</td>
-                        </tr>
-                    </table>
-                </el-collapse-item>
-                <el-collapse-item name="2" title="Полный пакет документов для регистрационных действий">
-                    <table>
-                        <tr>
-                            <td>Создание ООО</td>
-                            <td>4000</td>
-                        </tr>
-                        <tr>
-                            <td>Внесение изменений в сведения о ЮЛ, содержащиеся в ЕГРЮЛ</td>
-                            <td>2500</td>
-                        </tr>
-                        <tr>
-                            <td>Внесение изменений в учредительные документы ЮЛ</td>
-                            <td>3500</td>
-                        </tr>
-                        <tr>
-                            <td>Передача доли в уставном капитале участнику или третьему лицу (через нотариуса)	</td>
-                            <td>от 2600</td>
-                        </tr>
-                        <tr>
-                            <td>Создание некоммерческой организации</td>
-                            <td>от 10000</td>
-                        </tr>
-                        <tr>
-                            <td>Внесение изменений в сведения о некоммерческой организации</td>
-                            <td>4500</td>
-                        </tr>
-                        <tr>
-                            <td>Электронная отправка</td>
-                            <td>700</td>
-                        </tr>
-                        <tr>
-                            <td>Сопровождение ликвидации ООО</td>
-                            <td>от 20000</td>
-                        </tr>
-                    </table>
-                </el-collapse-item>
-                <el-collapse-item name="3" title='Регистрация "под ключ" (включает электронную отпраку, консультацию по выбору СНО)'>
-                    <table>
-                        <tr>
-                            <td>Регистрация ИП</td>
-                            <td>3500</td>
-                        </tr>
-                         <tr>
-                            <td>Изменение ИП</td>
-                            <td>2000</td>
-                        </tr>
-                         <tr>
-                            <td>Ликвидация ИП</td>
-                            <td>от 2000</td>
-                        </tr>
-                         <tr>
-                            <td>Регистрация ООО</td>
-                            <td>6500</td>
-                        </tr>
-                         <tr>
-                            <td>Внесение изменений в ЕГРЮЛ</td>
-                            <td>3500</td>
-                        </tr>
-                         <tr>
-                            <td>Внесение изменений в устав</td>
-                            <td>4500</td>
-                        </tr>
-                         <tr>
-                            <td>Реорганизация</td>
-                            <td>от 15000</td>
-                        </tr>
-                         <tr>
-                            <td>Уменьшение УК</td>
-                            <td>10000</td>
-                        </tr>
-                         <tr>
-                            <td>Ликвидация "под ключ" с проведением всех необходимых сверок</td>
-                            <td>от 20000</td>
-                        </tr>
-                    </table>
-                </el-collapse-item>
-            </el-collapse>
-        </div>
-        <div class="color-half">
-            <i class="fas fa-stamp"></i>
+        <div class="service-wrapper center">
+            <div class="white-half">
+                <el-collapse v-model="ooo" accordion>
+                    <el-collapse-item name="1" title="Заполнение форм заявлений">
+                        <table>
+                            <tr>
+                                <td>Р21001 Заявление регистрации физического лица в качестве ИП</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td>Р24001 Заявление о внесении изменений в сведения об ИП, содержащиеся в ЕГРИП</td>
+                                <td>700</td>
+                            </tr>
+                            <tr>
+                                <td>Р26001 Заявление о регистрации прекращения деятельности в качестве ИП</td>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>Р11001 Заявление о регистрации ЮЛ при создании (+ за каждого учредителя)</td>
+                                <td>1500 (+300)</td>
+                            </tr>
+                            <tr>
+                                <td>Р12003 Заявление о регистрации ЮЛ, создаваемого путём реорганизации</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>Р13014 Заявление о регистрации изменений</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>Р15001 Уведомление о ликвидации ЮЛ</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>Р16001 Заявление о регистрации ЮЛ в связи с его ликвидацией</td>
+                                <td>1500</td>
+                            </tr>
+                        </table>
+                    </el-collapse-item>
+                    <el-collapse-item name="2" title="Полный пакет документов для регистрационных действий">
+                        <table>
+                            <tr>
+                                <td>Создание ООО</td>
+                                <td>4000</td>
+                            </tr>
+                            <tr>
+                                <td>Внесение изменений в сведения о ЮЛ, содержащиеся в ЕГРЮЛ</td>
+                                <td>2500</td>
+                            </tr>
+                            <tr>
+                                <td>Внесение изменений в учредительные документы ЮЛ</td>
+                                <td>3500</td>
+                            </tr>
+                            <tr>
+                                <td>Передача доли в уставном капитале участнику или третьему лицу (через нотариуса) </td>
+                                <td>от 2600</td>
+                            </tr>
+                            <tr>
+                                <td>Создание некоммерческой организации</td>
+                                <td>от 10000</td>
+                            </tr>
+                            <tr>
+                                <td>Внесение изменений в сведения о некоммерческой организации</td>
+                                <td>4500</td>
+                            </tr>
+                            <tr>
+                                <td>Электронная отправка</td>
+                                <td>700</td>
+                            </tr>
+                            <tr>
+                                <td>Сопровождение ликвидации ООО</td>
+                                <td>от 20000</td>
+                            </tr>
+                        </table>
+                    </el-collapse-item>
+                    <el-collapse-item name="3" title='Регистрация "под ключ" (включает электронную отпраку, консультацию по выбору СНО)'>
+                        <table>
+                            <tr>
+                                <td>Регистрация ИП</td>
+                                <td>3500</td>
+                            </tr>
+                            <tr>
+                                <td>Изменение ИП</td>
+                                <td>2000</td>
+                            </tr>
+                            <tr>
+                                <td>Ликвидация ИП</td>
+                                <td>от 2000</td>
+                            </tr>
+                            <tr>
+                                <td>Регистрация ООО</td>
+                                <td>6500</td>
+                            </tr>
+                            <tr>
+                                <td>Внесение изменений в ЕГРЮЛ</td>
+                                <td>3500</td>
+                            </tr>
+                            <tr>
+                                <td>Внесение изменений в устав</td>
+                                <td>4500</td>
+                            </tr>
+                            <tr>
+                                <td>Реорганизация</td>
+                                <td>от 15000</td>
+                            </tr>
+                            <tr>
+                                <td>Уменьшение УК</td>
+                                <td>10000</td>
+                            </tr>
+                            <tr>
+                                <td>Ликвидация "под ключ" с проведением всех необходимых сверок</td>
+                                <td>от 20000</td>
+                            </tr>
+                        </table>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
+            <div class="color-half">
+                <i class="fas fa-stamp"></i>
                 <h3>Операции с ООО и ИП</h3>
                 <p>Мы предоставляем услуги по созданию, внесению изменений и ликвидации Обществ с ограниченной ответственностью и Индивидуальных предпринимателей.
                 </p>
+            </div>
+
         </div>
-        
-    </div>
-    <div class="service-wrapper">
-        <div class="color-half">
-            <i class="fas fa-file-invoice-dollar"></i>
+        <div class="service-wrapper">
+            <div class="color-half">
+                <i class="fas fa-file-invoice-dollar"></i>
                 <h3>Декларации для физ. лиц</h3>
                 <p>Мы заполняем декларации
-                     по форме 3-НДФЛ для получения 
-                     имущественного вычета 
-                     (возврата 13% с покупки жилой недвижимости),
-                      социального вычета (лечение, обучение), 
-                      инвестиционного вычета, а также при
-                       получении дохода и продаже имущества.</p>
+                    по форме 3-НДФЛ для получения
+                    имущественного вычета
+                    (возврата 13% с покупки жилой недвижимости),
+                    социального вычета (лечение, обучение),
+                    инвестиционного вычета, а также при
+                    получении дохода и продаже имущества.</p>
+            </div>
+            <div class="white-half right-half">
+                <el-collapse v-model="ndfl" accordion>
+                    <el-collapse-item name="1" title="3-НДФЛ (включая заявление на возврат)">
+                        <table>
+                            <tr>
+                                <td>Имущественный вычет (при приобретении жилья)</td>
+                                <td>от 800</td>
+                            </tr>
+                            <tr>
+                                <td>Стандартный вычет</td>
+                                <td>от 800</td>
+                            </tr>
+                            <tr>
+                                <td>Социальный вычет (лечение, обучение)</td>
+                                <td>от 800</td>
+                            </tr>
+                            <tr>
+                                <td>Продажа имущества/получение дохода</td>
+                                <td>от 650</td>
+                            </tr>
+                            <tr>
+                                <td>Отправка через личный кабинет</td>
+                                <td>300</td>
+                            </tr>
+                            <tr>
+                                <td>Отправка почтой</td>
+                                <td>350</td>
+                            </tr>
+                        </table>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
         </div>
-        <div class="white-half right-half">
-            <el-collapse v-model="ndfl" accordion>
-                <el-collapse-item name="1" title="3-НДФЛ (включая заявление на возврат)">
-                    <table>
-                        <tr>
-                            <td>Имущественный вычет (при приобретении жилья)</td>
-                            <td>от 800</td>
-                        </tr>
-                        <tr>
-                            <td>Стандартный вычет</td>
-                            <td>от 800</td>
-                        </tr>
-                        <tr>
-                            <td>Социальный вычет (лечение, обучение)</td>
-                            <td>от 800</td>
-                        </tr>
-                        <tr>
-                            <td>Продажа имущества/получение дохода</td>
-                            <td>от 650</td>
-                        </tr>
-                        <tr>
-                            <td>Отправка через личный кабинет</td>
-                            <td>300</td>
-                        </tr>
-                        <tr>
-                            <td>Отправка почтой</td>
-                            <td>350</td>
-                        </tr>
-                    </table>
-                </el-collapse-item>
-            </el-collapse>
-        </div>
-    </div>
     </div>
 </section>
 </template>
 
 <script>
+import gsap from 'gsap'
 export default {
+    computed: {
+        animatedNumber: function () {
+            return this.tweenedNumber.toFixed(0);
+        }
+    },
+    watch: {
+        price: function (newValue) {
+            gsap.to(this.$data, { duration: 0.5, tweenedNumber: newValue });
+        }
+    },
+    methods: {
+        calc() {
+            let eKoef = 850;
+            let oKoef = 80;
+            let snoKoef = 1;
+            let sKoef = this.vid;
+            if (isNaN(this.eNumber)) {
+                this.eNumber = 0
+            }
+            if (isNaN(this.oNumber)) {
+                this.oNumber = 0
+            }
+            if (this.sno == 4 && this.formOrg === "1") {
+                this.sno = "3"
+            }
+            if (this.sno == 3 && this.formOrg === "2") {
+                this.sno = "4"
+            }
+            if (this.formOrg === "1") {
+                if (this.sno == 1) {
+                    snoKoef = 1
+                }
+                if (this.sno == 2) {
+                    snoKoef = 0.9
+                }
+                if (this.sno == 3) {
+                    snoKoef = 1.4
+                }
+
+            }
+            if (this.formOrg === "2") {
+                if (this.sno == 1) {
+                    snoKoef = 0.9
+                }
+                if (this.sno == 2) {
+                    snoKoef = 0.8
+                }
+                if (this.sno == 4) {
+                    snoKoef = 0.8
+                }
+
+            }
+            this.price = eKoef * this.eNumber + this.oNumber * oKoef * snoKoef * sKoef;
+            this.price = Math.ceil(this.price);
+            this.ed = " рублей/месяц";
+            if (this.formOrg === "1") {
+                if (this.sno == 1) {
+                    if (this.oNumber === 0) {
+                        this.price = 2750
+                        this.ed = " рублей/квартал"
+                    } else {
+                        if (this.price < 5000) {
+                            this.price = 5000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+                if (this.sno == 2) {
+                    if (this.oNumber === 0) {
+                        this.price = 2750
+                        this.ed = " рублей/квартал"
+                    } else {
+                        if (this.price < 5000) {
+                            this.price = 5000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+                if (this.sno == 3) {
+                    if (this.oNumber === 0) {
+                        this.price = 3300
+                        this.ed = " рублей/квартал"
+                    } else {
+                        if (this.price < 7000) {
+                            this.price = 7000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+
+            }
+            if (this.formOrg === "2") {
+                if (this.sno == 1) {
+                    if (this.oNumber === 0) {
+                        this.price = 2500
+                        this.ed = " рублей/год"
+                    } else {
+                        if (this.price < 5000) {
+                            this.price = 5000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+                if (this.sno == 2) {
+                    if (this.oNumber === 0) {
+                        this.price = 2500
+                        this.ed = " рублей/год"
+                    } else {
+                        if (this.price < 4000) {
+                            this.price = 4000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+                if (this.sno == 4) {
+                    if (this.oNumber === 0) {
+                        this.price = "0"
+                        this.ed = " рублей/год"
+                    } else {
+                        if (this.price < 4000) {
+                            this.price = 4000
+                            this.ed = " рублей/месяц"
+                        }
+                    }
+                }
+
+            }
+        }
+    },
     data() {
         return {
+            tweenedNumber: 0,
+            
+            ed: null,
+            price: null,
+            sDisabled: false,
+            oDisabled: false,
+            eDisabled: false,
+            eNumber: 0,
+            oNumber: 0,
+            vid: 1,
+            sno: '',
+            formOrg: '1',
             ooo: '0',
             ndfl: '1'
         }
@@ -213,55 +396,134 @@ export default {
 </script>
 
 <style>
-td{
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active до версии 2.1.8 */
+    {
+    opacity: 0;
+}
+
+.price {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.price span {
+    color: #1ea69a;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.el-select-dropdown__item {
+    font-family: Raleway, sans-serif !important;
+}
+
+.calc-wrapper h3 {
+    text-align: center;
+}
+
+.calc-wrapper {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+td {
     padding-left: 10px;
 }
-.el-collapse-item__header{
-    font-size: 16px!important;
-    line-height: 20px!important;
+
+.el-radio-button__inner {
+    transition: all .2s;
+}
+
+.el-radio-button__inner:hover {
+    color: #1ea69a !important;
+}
+
+.is-active .el-radio-button__inner:hover {
+    color: white !important;
+}
+
+.el-collapse-item__header {
+    font-size: 16px !important;
+    line-height: 20px !important;
     transition: all .2s;
     padding-left: 10px;
 }
-.el-collapse-item__header.is-active{
-    color: #1ea69a!important;
-    
+
+.el-collapse-item__header.is-active {
+    color: #1ea69a !important;
+
     transition: all .2s;
 }
-table{
+td:last-child{
+    width: 80px;
+}
+table {
     width: 100%;
     border-spacing: 0;
-    font-size: 14px;
+    font-size: 16px;
 }
-tr:nth-child(even){
+
+tr:nth-child(even) {
     background: rgb(245, 245, 245);
 }
-.white-half{
+tr:nth-child(odd){
+     background: rgb(224, 224, 224);
+}
+.el-collapse-item__content{
+    padding-bottom: unset!important;
+}
+.white-half {
     flex: 1 1 500px;
     box-sizing: border-box;
     background: #ebebeb9f;
 }
-.service-wrapper{
+
+.service-wrapper {
     display: flex;
     flex-wrap: wrap;
 
 }
 
-.color-half{
+.color-half {
     background: #1ea69a;
     color: white;
     flex: 1 1 500px;
-    padding: 80px;    
+    padding: 80px;
     box-sizing: border-box;
 }
-.service-wrapper  .fas{
+
+.service-wrapper .fas {
     font-size: 60px;
 }
-.service-wrapper h3{
+
+.service-wrapper h3 {
     font-size: 30px;
 }
-.service-wrapper p{
-    font-size: 20px;
+
+.service-wrapper p {
+    font-size: 16px;
 }
+
+.el-form-item__label {
+    line-height: unset !important;
+    font-size: 14px !important;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 40px;
+}
+
 .subheader {
     color: #b5b5b5;
     font-size: 16px;
