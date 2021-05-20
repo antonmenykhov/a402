@@ -350,7 +350,7 @@ export default {
             this.price = Math.ceil(this.price);
             this.ed = " рублей/месяц";
             if (this.formOrg === "1") {
-                this.vidF = "ООО"
+                this.formOrgF = "ООО"
                 if (this.sno == 1) {
                     this.snoF = "УСН доходы-расходы"
                     if (this.oNumber === 0) {
@@ -472,8 +472,8 @@ export default {
             eDisabled: true,
             eNumber: 0,
             oNumber: 0,
-            vid: 0,
-            sno: '',
+            vid: 1,
+            sno: '1',
             formOrg: '',
             ooo: '0',
             ndfl: '1',
