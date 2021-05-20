@@ -1,17 +1,14 @@
 <template>
 <section class="services">
-    <div class="container">
+    <div class="container" id="services">
         <h2>Центр налоговой помощи</h2>
 
         <div class="spacer"></div>
-        <p class="subheader">В налоговом законодательстве Российской Федерации множетсво проволочек и подводных камней. <br> Именно поэтому, неподготовленному человеку довольно сложно разобраться
-            во всех тонкостях. В такой ситуации стоит обратиться за помощью к профессионалам
-        </p>
 
         <div class="service-wrapper">
-            <div class="color-half">
+            <div class="color-half" id="buh">
                 <i class="fas fa-balance-scale"></i>
-                <h3>Бухгалтерское обслуживание</h3>
+                <h3>Бухгалтерское сопровождение</h3>
                 <p>Мы предоставляем услуги по
                     ведению бухгалтерского учета Юридическим лицам и
                     Индивидуальным предпринимателям на различных системах
@@ -21,8 +18,8 @@
                     выборе оптимальной системы налогообложения.
                 </p>
             </div>
-            <div class="white-half calc-wrapper">
-                <h3>Калькулятор бухгалтерских услуг</h3>
+            <div class="white-half calc-wrapper" id="calc">
+                <h3>Калькулятор бухгалтерского сопровождения</h3>
                 <el-form label-width="200px">
                     <el-form-item label="Форма организации">
                         <el-radio-group @change="calc" v-model="formOrg" fill="#1EA69A">
@@ -40,11 +37,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Сфера деятельности">
-                        <el-radio-group @change="calc" fill="#1EA69A" v-model="vid">
-                            <el-radio-button :disabled="sDisabled" :label="1">Услуги</el-radio-button>
-                            <el-radio-button :disabled="sDisabled" :label="1.2">Торговля</el-radio-button>
-                            <el-radio-button :disabled="sDisabled" :label="1.4">Производство</el-radio-button>
-                        </el-radio-group>
+                        <el-select  @change="calc" fill="#1EA69A" v-model="vid">
+                            <el-option :disabled="sDisabled" :value="1"   label="Услуги"  >Услуги</el-option>
+                            <el-option :disabled="sDisabled" :value="1.2" label="Торговля">Торговля</el-option>
+                            <el-option :disabled="sDisabled" :value="1.4" label="Производство">Производство</el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="Количество операций">
                         <el-input-number :disabled="oDisabled" @change="calc" :step="5" :min="0" controls-position="right" v-model="oNumber">
@@ -59,10 +56,15 @@
                     <transition name="fade">
 
                         <div v-if="price" class="price">
-                            Стоимость обслуживания составит:
+                            Стоимость сопровождения составит:<br>
                             <span>{{animatedNumber}}</span>{{ed}}
+
                         </div>
+
                     </transition>
+                    <el-form-item class="zakaz" v-if="price">
+                        <el-button @click="dialog=true">Заказать </el-button>
+                    </el-form-item>
                 </el-form>
 
             </div>
@@ -185,7 +187,7 @@
                     </el-collapse-item>
                 </el-collapse>
             </div>
-            <div class="color-half">
+            <div class="color-half" id="ooo">
                 <i class="fas fa-stamp"></i>
                 <h3>Операции с ООО и ИП</h3>
                 <p>Мы предоставляем услуги по созданию, внесению изменений и ликвидации Обществ с ограниченной ответственностью и Индивидуальных предпринимателей.
@@ -194,7 +196,7 @@
 
         </div>
         <div class="service-wrapper">
-            <div class="color-half">
+            <div class="color-half" id="ndfl">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <h3>Декларации для физ. лиц</h3>
                 <p>Мы заполняем декларации
@@ -239,11 +241,26 @@
             </div>
         </div>
     </div>
+    <el-dialog :visible.sync="dialog" title="Заказать сопровождение">
+        <el-form :rules="rules" ref="sForm" :model="sForm">
+            <el-form-item prop="name" label="Имя">
+                <el-input v-model="sForm.name"> </el-input>
+            </el-form-item>
+            <el-form-item prop="phone" label="Телефон">
+                <el-input v-model="sForm.phone"></el-input>
+            </el-form-item>
+            <el-form-item label="Почта">
+                <el-input v-model="sForm.mail"> </el-input>
+            </el-form-item>
+            <el-button :loading="loading" @click="send">Отправить</el-button>
+        </el-form>
+    </el-dialog>
 </section>
 </template>
 
 <script>
 import gsap from 'gsap'
+import axios from 'axios'
 export default {
     computed: {
         animatedNumber: function () {
@@ -256,11 +273,43 @@ export default {
         }
     },
     methods: {
+        send() {
+            this.$refs['sForm'].validate((valid) => {
+                if (valid) {
+                    this.loading = true;
+                    let data = new FormData;
+                    data.append('name', this.sForm.name);
+                    data.append('phone', this.sForm.phone);
+                    data.append('mail', this.sForm.mail);
+                    data.append('form', this.formOrgF);
+                    data.append('sno', this.snoF);
+                    data.append('type', 'calc');
+                    data.append('vid', this.vidF);
+                    data.append('oNum', this.oNumber);
+                    data.append('eNum', this.eNumber);
+                    data.append('price', this.price);
+                    axios.post('mailer.php', data).then(response => {
+                        console.log(response.data);
+                        this.loading = false;
+                        this.dialog = false
+                    })
+                } else {
+
+                    return false;
+                }
+            });
+        },
         calc() {
             let eKoef = 850;
             let oKoef = 80;
             let snoKoef = 1;
             let sKoef = this.vid;
+            if (this.oNumber == 0) {
+                this.eDisabled = true
+                this.eNumber = 0
+            } else {
+                this.eDisabled = false
+            }
             if (isNaN(this.eNumber)) {
                 this.eNumber = 0
             }
@@ -297,105 +346,172 @@ export default {
                 }
 
             }
-            this.price = eKoef * this.eNumber + this.oNumber * oKoef * snoKoef * sKoef;
+            this.price = this.oNumber * oKoef * snoKoef * sKoef;
             this.price = Math.ceil(this.price);
             this.ed = " рублей/месяц";
             if (this.formOrg === "1") {
+                this.vidF = "ООО"
                 if (this.sno == 1) {
+                    this.snoF = "УСН доходы-расходы"
                     if (this.oNumber === 0) {
                         this.price = 2750
                         this.ed = " рублей/квартал"
                     } else {
                         if (this.price < 5000) {
-                            this.price = 5000
+                            this.price = 5000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
                 if (this.sno == 2) {
+                    this.snoF = "УСН доходы"
                     if (this.oNumber === 0) {
                         this.price = 2750
                         this.ed = " рублей/квартал"
                     } else {
                         if (this.price < 5000) {
-                            this.price = 5000
+                            this.price = 5000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
                 if (this.sno == 3) {
+                    this.snoF = "ОСНО"
                     if (this.oNumber === 0) {
                         this.price = 3300
                         this.ed = " рублей/квартал"
                     } else {
                         if (this.price < 7000) {
-                            this.price = 7000
+                            this.price = 7000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
 
             }
             if (this.formOrg === "2") {
+                this.formOrgF = "ИП"
                 if (this.sno == 1) {
+                    this.snoF = "УСН доходы-расходы"
                     if (this.oNumber === 0) {
                         this.price = 2500
                         this.ed = " рублей/год"
                     } else {
                         if (this.price < 5000) {
-                            this.price = 5000
+                            this.price = 5000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
                 if (this.sno == 2) {
+                    this.snoF = "УСН доходы"
                     if (this.oNumber === 0) {
                         this.price = 2500
                         this.ed = " рублей/год"
                     } else {
                         if (this.price < 4000) {
-                            this.price = 4000
+                            this.price = 4000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
                 if (this.sno == 4) {
+                    this.snoF = "Патент"
                     if (this.oNumber === 0) {
                         this.price = "0"
                         this.ed = " рублей/год"
                     } else {
                         if (this.price < 4000) {
-                            this.price = 4000
+                            this.price = 4000 + eKoef * this.eNumber
                             this.ed = " рублей/месяц"
+                        } else {
+                            this.price += eKoef * this.eNumber
                         }
                     }
                 }
 
             }
+            if (this.vid == 1){
+                this.vidF = 'Услуги'
+            }
+            if (this.vid == 1.2){
+                this.vidF = 'Торговля'
+            }
+            if (this.vid == 1.4){
+                this.vidF = 'Производство'
+            }
         }
     },
     data() {
         return {
+            sForm: {
+                name: '',
+                phone: '',
+                mail: ''
+            },
+            rules: {
+                name: [{ required: true, message: 'Имя обязательно', trigger: 'blur' }],
+                phone: [{ required: true, message: 'Телефон обязателен', trigger: 'blur' }],
+            },
             tweenedNumber: 0,
-            
+            dialog: false,
             ed: null,
             price: null,
             sDisabled: false,
             oDisabled: false,
-            eDisabled: false,
+            eDisabled: true,
             eNumber: 0,
             oNumber: 0,
-            vid: 1,
+            vid: 0,
             sno: '',
-            formOrg: '1',
+            formOrg: '',
             ooo: '0',
-            ndfl: '1'
+            ndfl: '1',
+            loading: false,
+            vidF: '',
+            snoF: '',
+            formOrgF: '',
         }
     },
 }
 </script>
 
 <style>
+.el-dialog .el-form-item__label {
+    height: auto !important;
+}
+
+.el-dialog {
+    max-width: 300px !important;
+    width: auto !important;
+
+}
+
+.zakaz {
+    margin-top: 20px;
+}
+
+.zakaz .el-button:hover,
+.el-dialog .el-button:hover {
+    background: #1ea69a;
+    color: white;
+    border: 1px solid #1ea69a;
+}
+
+.services {
+    background: rgb(242, 242, 242);
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity .5s;
@@ -407,6 +523,10 @@ export default {
 /* .fade-leave-active до версии 2.1.8 */
     {
     opacity: 0;
+}
+
+.el-select-dropdown__item.selected {
+    color: #1ea69a !important;
 }
 
 .price {
@@ -465,9 +585,11 @@ td {
 
     transition: all .2s;
 }
-td:last-child{
+
+td:last-child {
     width: 80px;
 }
+
 table {
     width: 100%;
     border-spacing: 0;
@@ -477,16 +599,19 @@ table {
 tr:nth-child(even) {
     background: rgb(245, 245, 245);
 }
-tr:nth-child(odd){
-     background: rgb(224, 224, 224);
+
+tr:nth-child(odd) {
+    background: rgb(224, 224, 224);
 }
-.el-collapse-item__content{
-    padding-bottom: unset!important;
+
+.el-collapse-item__content {
+    padding-bottom: unset !important;
 }
+
 .white-half {
-    flex: 1 1 500px;
+    flex: 1 1 400px;
     box-sizing: border-box;
-    background: #ebebeb9f;
+
 }
 
 .service-wrapper {
@@ -496,9 +621,9 @@ tr:nth-child(odd){
 }
 
 .color-half {
-    background: #1ea69a;
+    background: #38C0B4;
     color: white;
-    flex: 1 1 500px;
+    flex: 1 1 400px;
     padding: 80px;
     box-sizing: border-box;
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Button, Carousel, CarouselItem, Collapse, CollapseItem,
      Radio, Switch, InputNumber, Input, Select, 
-     RadioGroup, RadioButton, Form, FormItem , Option} from 'element-ui'
+     RadioGroup, RadioButton, Form, FormItem , Option, Dialog} from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/ru-RU'
 import locale from 'element-ui/lib/locale'
 
@@ -22,3 +22,4 @@ Vue.use(RadioButton)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Option)
+Vue.use(Dialog)
