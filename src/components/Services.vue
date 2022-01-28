@@ -411,8 +411,8 @@ export default {
             this.price = 3000;
             this.ed = " рублей/квартал";
           } else {
-            if (this.price < 5000) {
-              this.price = 5000 + eKoef * this.eNumber;
+            if (this.price < 7000) {
+              this.price = 7000 + eKoef * this.eNumber;
               this.ed = " рублей/месяц";
             } else {
               this.price += eKoef * this.eNumber;
@@ -425,8 +425,8 @@ export default {
             this.price = 3000;
             this.ed = " рублей/квартал";
           } else {
-            if (this.price < 5000) {
-              this.price = 5000 + eKoef * this.eNumber;
+            if (this.price < 6000) {
+              this.price = 6000 + eKoef * this.eNumber;
               this.ed = " рублей/месяц";
             } else {
               this.price += eKoef * this.eNumber;
